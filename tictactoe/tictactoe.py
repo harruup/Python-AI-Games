@@ -25,7 +25,6 @@ def player(board):
     """
     if(board == initial_state()):
         return X
-    action = minimax(board)
     num_of_X = 0
     num_of_O = 0
     for i in range(3):
@@ -123,7 +122,15 @@ def minimax(board):
 def maxvalue(board):
     if terminal(board):
         return utility(board)
+    v = float('-inf')
+    for action in actions(board):
+        v = max(v, minvalue(result(board, action)))
+    return v
 
 def minvalue(board):
     if terminal(board):
         return utility(board)
+    v = float('inf')
+    for action in actions(board):
+        v = min(v, maxvalue(result(board, action)))
+    return v
