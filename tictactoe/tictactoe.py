@@ -2,7 +2,6 @@
 Tic Tac Toe Player
 """
 
-import math
 import copy
 
 X = "X"
@@ -25,15 +24,15 @@ def player(board):
     """
     if(board == initial_state()):
         return X
-    num_of_X = 0
-    num_of_O = 0
+    countX = 0
+    countO = 0
     for i in range(3):
         for j in range(3):
             if (board[i][j] == X):
-                num_of_X = num_of_X + 1
+                countX = countX + 1
             elif (board[i][j] == O):
-                num_of_O = num_of_O + 1
-    return (O, X)[num_of_X == num_of_O]
+                countO = countO + 1
+    return (O, X)[countX == countO]
 
 def actions(board):
     """
@@ -58,6 +57,7 @@ def result(board, action):
         else:
             new_board[action[0]][action[1]] = O
     except:
+        print("Action is invalid")
         raise
 
     return new_board
@@ -75,7 +75,7 @@ def winner(board):
     elif(board[1][0] == board[1][1] == board[1][2]):
         return board[1][0]
     else:
-        None
+        return None
 
 def terminal(board):
     """
@@ -99,28 +99,32 @@ def minimax(board):
     """
     Returns the optimal action for the current player on the board.
     """
-    if(player(board) == X):
+    if board == terminal(board):
+        return None
+    if board == initial_state():
+        return (1, 1)
+    if player(board) == X:
         value = float('-inf')
         move = ()
         for action in actions(board):
             #print(str(action[0])+", "+str(action[1]))
-            v = minvalue(result(board, action))
+            minval = minvalue(result(board, action))
             #print("v value "+str(v))
-            if(v > value):
-                value = v
+            if minval > value:
+                value = minval
                 move = action
         #print("Move: "+str(move[0])+", "+str(move[1]))
         return move
-    
-    if(player(board) == O):
+   
+    if player(board) == O:
         value = float('inf')
         move = ()
         for action in actions(board):
             #print(str(action[0])+", "+str(action[1]))
-            v = maxvalue(result(board, action))
+            maxval = maxvalue(result(board, action))
             #print("v value "+str(v))
-            if(v < value):
-                value = v
+            if(maxval < value):
+                value = maxval
                 move = action
         #print(str(move[0])+", "+str(move[1]))
         return move
@@ -128,15 +132,15 @@ def minimax(board):
 def maxvalue(board):
     if terminal(board):
         return utility(board)
-    v = float('-inf')
+    value = float('-inf')
     for action in actions(board):
-        v = max(v, minvalue(result(board, action)))
-    return v
+        value = max(value, minvalue(result(board, action)))
+    return value
 
 def minvalue(board):
     if terminal(board):
         return utility(board)
-    v = float('inf')
+    value = float('inf')
     for action in actions(board):
-        v = min(v, maxvalue(result(board, action)))
-    return v
+        value = min(value, maxvalue(result(board, action)))
+    return value
