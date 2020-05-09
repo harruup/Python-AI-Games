@@ -66,7 +66,7 @@ def winner(board):
     """
     Returns the winner of the game, if there is one.
     """
-    if(board[0][0] == board[0][1] == board[0][2] or board[0][0] == board[1][0] == board[2][1] or board[0][0] == board[1][1] == board[2][2]):
+    if(board[0][0] == board[0][1] == board[0][2] or board[0][0] == board[1][0] == board[2][0] or board[0][0] == board[1][1] == board[2][2]):
         return board[0][0]
     elif(board[0][2] == board[1][2] == board[2][2] or board[0][2] == board[1][1] == board[2][0]):
         return board[0][2]
@@ -103,20 +103,26 @@ def minimax(board):
         value = float('-inf')
         move = ()
         for action in actions(board):
-            v = maxvalue(result(board, action))
+            #print(str(action[0])+", "+str(action[1]))
+            v = minvalue(result(board, action))
+            #print("v value "+str(v))
             if(v > value):
                 value = v
                 move = action
+        #print("Move: "+str(move[0])+", "+str(move[1]))
         return move
     
     if(player(board) == O):
         value = float('inf')
         move = ()
         for action in actions(board):
-            v = minvalue(result(board, action))
+            #print(str(action[0])+", "+str(action[1]))
+            v = maxvalue(result(board, action))
+            #print("v value "+str(v))
             if(v < value):
                 value = v
                 move = action
+        #print(str(move[0])+", "+str(move[1]))
         return move
 
 def maxvalue(board):
