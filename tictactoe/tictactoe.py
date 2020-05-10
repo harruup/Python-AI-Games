@@ -102,7 +102,7 @@ def minimax(board):
     if board == terminal(board):
         return None
     if board == initial_state():
-        return (1, 1)
+        return (0, 0)
     if player(board) == X:
         value = float('-inf')
         move = ()
@@ -135,6 +135,9 @@ def maxvalue(board):
     value = float('-inf')
     for action in actions(board):
         value = max(value, minvalue(result(board, action)))
+        #we can't go higher than 1 so we exit when we reach this value
+        if value == 1:
+            return value
     return value
 
 def minvalue(board):
@@ -143,4 +146,7 @@ def minvalue(board):
     value = float('inf')
     for action in actions(board):
         value = min(value, maxvalue(result(board, action)))
+        #we can't go lower than -1 so we exit when we reach this value
+        if value == -1:
+            return value
     return value
